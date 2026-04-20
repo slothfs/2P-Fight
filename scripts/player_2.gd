@@ -10,20 +10,55 @@ var gravity: float = 800
 var attacking: bool = false
 var attack_cooldown: float = 0.0
 var opponent: CharacterBody2D = null
-var game_manager: GameManager
 
 func die() -> void:
 	print("player 2 died")
-	if game_manager:
-		game_manager.end_game(1)
+	var gm = get_node_or_null("/root/GameManager")
+	if gm: gm.end_game(1)
 	queue_free()
 
 func _ready() -> void:
-	_ensure_game_manager()
-	if game_manager and game_manager.player2_skin_color != Color.WHITE:
-		$AnimatedSprite2D.modulate = game_manager.player2_skin_color
+	var gm = get_node_or_null("/root/GameManager")
+	if gm:
+		if gm.player2_skin_id != 0:
+			apply_skin(gm.player2_skin_id)
+		elif gm.player2_skin_color != Color.WHITE:
+			$AnimatedSprite2D.modulate = gm.player2_skin_color
 
 	_sync_back_area_position($AnimatedSprite2D.flip_h)
+
+func apply_skin(skin_id: int) -> void:
+	var new_frames = $AnimatedSprite2D.sprite_frames.duplicate(true)
+	
+	for anim_name in new_frames.get_animation_names():
+		for i in range(new_frames.get_frame_count(anim_name)):
+			var old_tex = new_frames.get_frame_texture(anim_name, i)
+			if old_tex is AtlasTexture:
+				var new_tex = old_tex.duplicate(true)
+				new_frames.set_frame(anim_name, i, new_tex, new_frames.get_frame_duration(anim_name, i))
+
+	var idle_tex = load("res://assets/skins/%d/idle.png" % skin_id)
+	var jump_tex = load("res://assets/skins/%d/jump.png" % skin_id)
+	var run_tex = load("res://assets/skins/%d/running.png" % skin_id)
+	var hit_tex_path = "res://assets/skins/%d/hitting.png" % skin_id
+	var hit_tex = null
+	if ResourceLoader.exists(hit_tex_path):
+		hit_tex = load(hit_tex_path)
+
+	_replace_anim_atlas(new_frames, "idle", idle_tex)
+	_replace_anim_atlas(new_frames, "jump", jump_tex)
+	_replace_anim_atlas(new_frames, "run", run_tex)
+	if hit_tex:
+		_replace_anim_atlas(new_frames, "hit", hit_tex)
+
+	$AnimatedSprite2D.sprite_frames = new_frames
+
+func _replace_anim_atlas(frames: SpriteFrames, anim_name: StringName, new_atlas: Texture2D) -> void:
+	if not frames.has_animation(anim_name) or new_atlas == null: return
+	for i in range(frames.get_frame_count(anim_name)):
+		var tex = frames.get_frame_texture(anim_name, i)
+		if tex is AtlasTexture:
+			tex.atlas = new_atlas
 
 
 func _physics_process(delta: float) -> void:
@@ -89,15 +124,6 @@ func _sync_back_area_position(facing_left: bool) -> void:
 	else:
 		$backarea/CollisionShape2D.position.x = -18
 		$Hitbox/CollisionShape2D.position.x = 15
-
-func _ensure_game_manager() -> void:
-	if GameManager.instance == null:
-		var gm: GameManager = GameManager.new()
-		get_tree().root.add_child(gm)
-	elif not GameManager.instance.is_inside_tree():
-		get_tree().root.add_child(GameManager.instance)
-
-	game_manager = GameManager.instance
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.name == "backarea" and area.get_parent() != self:

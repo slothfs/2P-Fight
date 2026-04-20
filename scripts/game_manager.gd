@@ -1,17 +1,18 @@
 extends Node
 
-class_name GameManager
-
 signal game_paused(paused: bool)
 signal game_over(winner: int)
 
 var is_paused: bool = false
 var player1_skin_color: Color = Color.WHITE
 var player2_skin_color: Color = Color.WHITE
+var player1_skin_id: int = 0
+var player2_skin_id: int = 0
+var selected_arena: String = "res://Scenes/game.tscn"
 var has_game_ended: bool = false
 var last_winner: int = 0
 
-static var instance: GameManager
+static var instance: Node
 
 func _enter_tree() -> void:
 	if instance == null:
@@ -52,11 +53,13 @@ func reset_game_state() -> void:
 	if get_tree().paused:
 		get_tree().paused = false
 
-func set_player_skin(player_num: int, color: Color) -> void:
+func set_player_skin(player_num: int, color: Color, skin_id: int = 0) -> void:
 	if player_num == 1:
 		player1_skin_color = color
+		player1_skin_id = skin_id
 	elif player_num == 2:
 		player2_skin_color = color
+		player2_skin_id = skin_id
 
 func end_game(winner: int) -> void:
 	if has_game_ended:
