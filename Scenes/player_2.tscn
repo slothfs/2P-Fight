@@ -163,6 +163,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0e4v"]
+radius = 9.666668
+height = 19.333336
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_eus2p"]
 radius = 15.0
@@ -181,7 +183,7 @@ animation = &"hit"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=3]
-position = Vector2(1, 18)
+position = Vector2(10, 14.333333)
 shape = SubResource("CapsuleShape2D_p0e4v")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=4]

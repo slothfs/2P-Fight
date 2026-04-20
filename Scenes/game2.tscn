@@ -29,7 +29,7 @@ script = ExtResource("4_controller")
 [node name="StaticBody2D" type="StaticBody2D" parent="Ground" unique_id=1658516213]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground/StaticBody2D" unique_id=1757419856]
-position = Vector2(640, 550)
+position = Vector2(658, 785)
 shape = SubResource("GroundShape")
 
 [node name="GroundSprite" type="ColorRect" parent="Ground" unique_id=1884314922]

@@ -1,6 +1,140 @@
 [gd_scene format=3 uid="uid://dhd08tcw8vte2"]
 
 [ext_resource type="Script" uid="uid://ktlrrql36rxv" path="res://scripts/main_menu.gd" id="1_menu"]
+[ext_resource type="Shader" uid="uid://c3dm2y8ja47ex" path="res://scripts/main_menu.gdshader" id="2_1ehe0"]
+[ext_resource type="Shader" uid="uid://d2l155uf8ib45" path="res://scripts/main_menu_bg.gdshader" id="2_n45e2"]
+[ext_resource type="Texture2D" uid="uid://ya6nmi6sfav4" path="res://assets/sau.png" id="3_ce3w2"]
+[ext_resource type="FontFile" uid="uid://deli6cany8awc" path="res://assets/Burger Crunchy.otf" id="4_ce3w2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_opfnp"]
+shader = ExtResource("2_n45e2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n45e2"]
+shader = ExtResource("2_1ehe0")
+shader_parameter/strength = 2.0
+shader_parameter/speed = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n45e2"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trj04"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16hvj"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opfnp"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vr1f0"]
+bg_color = Color(0.16562521, 7.70092e-06, 0.70569813, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cp0ys"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t1dhk"]
+bg_color = Color(0.16562521, 7.70092e-06, 0.70569813, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhxw7"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5egv6"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 200
+corner_radius_top_right = 100
+corner_radius_bottom_right = 200
+corner_radius_bottom_left = 100
+
+[sub_resource type="Animation" id="Animation_n45e2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_opfnp"]
+resource_name = "break_swing"
+length = 2.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.9666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.3962634]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cp0ys"]
+_data = {
+&"RESET": SubResource("Animation_n45e2"),
+&"break_swing": SubResource("Animation_opfnp")
+}
 
 [node name="MainMenu" type="Control" unique_id=1624828725]
 layout_mode = 3
@@ -11,14 +145,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="Background" type="ColorRect" parent="." unique_id=312625685]
+[node name="bg" type="ColorRect" parent="." unique_id=1054789369]
+z_index = -2
+material = SubResource("ShaderMaterial_opfnp")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.15, 0.3, 1)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1129887474]
+z_index = -1
+material = SubResource("ShaderMaterial_n45e2")
+layout_mode = 0
+offset_left = -133.0
+offset_top = 107.0
+offset_right = 584.0
+offset_bottom = 824.0
+texture = ExtResource("3_ce3w2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1419908870]
 layout_mode = 1
@@ -27,40 +172,81 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = -150.0
-offset_right = 120.0
-offset_bottom = 150.0
+offset_left = -56.0
+offset_top = 15.0
+offset_right = 184.0
+offset_bottom = 315.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 3
 alignment = 1
-
-[node name="Title" type="Label" parent="VBoxContainer" unique_id=1336871212]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
-theme_override_font_sizes/font_size = 60
-text = "BATTLE ARENA"
-
-[node name="PlayButton" type="Button" parent="VBoxContainer" unique_id=1950562324]
-custom_minimum_size = Vector2(200, 60)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "PLAY ARENA 1"
 
 [node name="SkinsButton" type="Button" parent="VBoxContainer" unique_id=2127713437]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 0.9254902)
+theme_override_colors/font_hover_color = Color(0.5339052, 0.00020426691, 0.53390133, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_n45e2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_trj04")
+theme_override_styles/hover = SubResource("StyleBoxFlat_16hvj")
 text = "SKINS"
+
+[node name="PlayButton" type="Button" parent="VBoxContainer" unique_id=1950562324]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(1.6845763e-06, 0, 0.6274631, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_opfnp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vr1f0")
+text = "Arena1"
 
 [node name="Arena2Button" type="Button" parent="VBoxContainer" unique_id=2127713438]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "PLAY ARENA 2"
+theme_override_colors/font_color = Color(2.2140146e-06, 0, 0.6662291, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_cp0ys")
+theme_override_styles/hover = SubResource("StyleBoxFlat_t1dhk")
+text = "arena2"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=1696746882]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(7.460266e-07, 0, 0.38540483, 1)
+theme_override_colors/font_hover_color = Color(0.0003944531, 0.00039445312, 0.00039445527, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_yhxw7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5egv6")
 text = "QUIT"
+
+[node name="Title" type="Label" parent="." unique_id=1336871212]
+layout_mode = 0
+offset_left = 423.0
+offset_top = 215.0
+offset_right = 1394.0
+offset_bottom = 339.5
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.2789908, 0.27899083, 0.27899083, 0.8156863)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.39607844)
+theme_override_constants/shadow_offset_x = 25
+theme_override_constants/shadow_offset_y = 25
+theme_override_fonts/font = ExtResource("4_ce3w2")
+theme_override_font_sizes/font_size = 100
+text = "MeatStick"
+
+[node name="Title2" type="Label" parent="." unique_id=2013489907]
+layout_mode = 0
+offset_left = 801.0
+offset_top = 48.0
+offset_right = 1248.0
+offset_bottom = 174.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_ce3w2")
+theme_override_font_sizes/font_size = 100
+text = "Madness"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Title2" unique_id=49541200]
+libraries/ = SubResource("AnimationLibrary_cp0ys")
+autoplay = &"break_swing"
