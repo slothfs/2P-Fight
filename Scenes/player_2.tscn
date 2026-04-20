@@ -164,7 +164,13 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0e4v"]
 
-[node name="Player1" type="CharacterBody2D" unique_id=2018238217]
+[sub_resource type="CircleShape2D" id="CircleShape2D_eus2p"]
+radius = 20.09975
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6cafw"]
+size = Vector2(5.333333, 53)
+
+[node name="Player2" type="CharacterBody2D" unique_id=2018238217]
 modulate = Color(0.5996037, 0.5996037, 0.5996037, 1)
 scale = Vector2(3, 3)
 script = ExtResource("1_n0kdt")
@@ -179,3 +185,19 @@ autoplay = "idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1686558507]
 position = Vector2(1, 18)
 shape = SubResource("CapsuleShape2D_p0e4v")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1387461115]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=457766082]
+position = Vector2(0, -4.3333335)
+shape = SubResource("CircleShape2D_eus2p")
+
+[node name="backarea" type="Area2D" parent="." unique_id=784336807]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="backarea" unique_id=1821790002]
+position = Vector2(-17.666668, 2)
+shape = SubResource("RectangleShape2D_6cafw")
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]

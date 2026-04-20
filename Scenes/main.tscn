@@ -143,7 +143,6 @@ sources/0 = SubResource("TileSetAtlasSource_bo1nx")
 
 [node name="Player1" parent="." unique_id=2018238217 instance=ExtResource("2_8gbba")]
 position = Vector2(105, 501)
-scale = Vector2(3, 3)
 
 [node name="TileMap" type="TileMap" parent="." unique_id=386283546]
 tile_set = SubResource("TileSet_8gbba")
@@ -152,4 +151,3 @@ layer_0/tile_data = PackedInt32Array(2424832, 0, 0, 2490368, 0, 1, 2555904, 0, 2
 
 [node name="Player2" parent="." unique_id=1487117312 instance=ExtResource("3_8gbba")]
 position = Vector2(552, 489)
-scale = Vector2(3, 3)

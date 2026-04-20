@@ -5,6 +5,10 @@ var jump_force = -400
 var gravity = 900
 var attacking = false
 
+#func die():
+	#print("player 1 died")
+	#queue_free()
+
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -44,3 +48,9 @@ func attack():
 	$AnimatedSprite2D.play("hit")
 	await get_tree().create_timer(0.3).timeout
 	attacking = false
+
+
+func _on_hitbox_area_entered(area: Area2D) -> void:
+		if area.name == "backarea":
+			var player = area.get_parent()
+			player.die()
