@@ -1,9 +1,22 @@
 [gd_scene format=3 uid="uid://c732cbsc62vdu"]
 
 [ext_resource type="Script" uid="uid://dpr2laxfro01f" path="res://scripts/player_2.gd" id="1_n0kdt"]
+[ext_resource type="Texture2D" uid="uid://bpuyi7udjkaas" path="res://assets/player/hitting.png" id="2_6cafw"]
 [ext_resource type="Texture2D" uid="uid://bggelhffumpqd" path="res://assets/player/idle.png" id="2_eus2p"]
 [ext_resource type="Texture2D" uid="uid://cgoyd6ipyuk6y" path="res://assets/player/jump.png" id="3_6cafw"]
 [ext_resource type="Texture2D" uid="uid://1wuefq8ujv3p" path="res://assets/player/running.png" id="4_mtyrt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtyrt"]
+atlas = ExtResource("2_6cafw")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bth63"]
+atlas = ExtResource("2_6cafw")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8os5a"]
+atlas = ExtResource("2_6cafw")
+region = Rect2(96, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_os74a"]
 atlas = ExtResource("2_eus2p")
@@ -71,7 +84,16 @@ region = Rect2(288, 0, 48, 48)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_r7fgb"]
 animations = [{
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtyrt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bth63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8os5a")
+}],
 "loop": true,
 "name": &"hit",
 "speed": 5.0
@@ -144,16 +166,15 @@ animations = [{
 
 [node name="Player1" type="CharacterBody2D" unique_id=2018238217]
 modulate = Color(0.5996037, 0.5996037, 0.5996037, 1)
+scale = Vector2(3, 3)
 script = ExtResource("1_n0kdt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1876720876]
 texture_filter = 1
 rotation = 0.54454273
 sprite_frames = SubResource("SpriteFrames_r7fgb")
-animation = &"idle"
+animation = &"hit"
 autoplay = "idle"
-frame = 4
-frame_progress = 0.0071708295
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1686558507]
 position = Vector2(1, 18)
