@@ -71,16 +71,16 @@ alignment = 1
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1309797122]
-custom_minimum_size = Vector2(200, 60)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 35
-text = "BACK"
-
 [node name="PlayButton" type="Button" parent="VBoxContainer" unique_id=136771555]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 35
 text = "PLAY"
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1309797122]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 35
+text = "BACK"

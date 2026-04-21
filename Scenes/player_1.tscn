@@ -1,167 +1,8 @@
-[gd_scene format=3 uid="uid://6ekc8v6ivc51"]
+[gd_scene format=3 uid="uid://jvvdtip4bmwq"]
 
 [ext_resource type="Script" uid="uid://cdy2wb43cs6qq" path="res://scripts/player_1.gd" id="1_c4k0l"]
-[ext_resource type="Texture2D" uid="uid://bggelhffumpqd" path="res://assets/player/idle.png" id="2_aatkl"]
-[ext_resource type="Texture2D" uid="uid://bpuyi7udjkaas" path="res://assets/player/hitting.png" id="2_lp8rx"]
-[ext_resource type="Texture2D" uid="uid://cgoyd6ipyuk6y" path="res://assets/player/jump.png" id="3_lp8rx"]
-[ext_resource type="Texture2D" uid="uid://1wuefq8ujv3p" path="res://assets/player/running.png" id="4_jkush"]
 [ext_resource type="Texture2D" uid="uid://ci2glj3r1m303" path="res://assets/64x64 textures (37).png" id="6_lp8rx"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jkush"]
-atlas = ExtResource("2_lp8rx")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vmi10"]
-atlas = ExtResource("2_lp8rx")
-region = Rect2(48, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mndha"]
-atlas = ExtResource("2_lp8rx")
-region = Rect2(96, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_os74a"]
-atlas = ExtResource("2_aatkl")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ggx0o"]
-atlas = ExtResource("2_aatkl")
-region = Rect2(48, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0kjde"]
-atlas = ExtResource("2_aatkl")
-region = Rect2(96, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ay52l"]
-atlas = ExtResource("2_aatkl")
-region = Rect2(144, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c6poq"]
-atlas = ExtResource("2_aatkl")
-region = Rect2(192, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gsfwq"]
-atlas = ExtResource("2_aatkl")
-region = Rect2(240, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_iet35"]
-atlas = ExtResource("3_lp8rx")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mxbqu"]
-atlas = ExtResource("3_lp8rx")
-region = Rect2(48, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0l2yj"]
-atlas = ExtResource("3_lp8rx")
-region = Rect2(96, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x8cua"]
-atlas = ExtResource("4_jkush")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s3tad"]
-atlas = ExtResource("4_jkush")
-region = Rect2(48, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ne8t6"]
-atlas = ExtResource("4_jkush")
-region = Rect2(96, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sc7t3"]
-atlas = ExtResource("4_jkush")
-region = Rect2(144, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mcfkd"]
-atlas = ExtResource("4_jkush")
-region = Rect2(192, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sg5fg"]
-atlas = ExtResource("4_jkush")
-region = Rect2(240, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_064nc"]
-atlas = ExtResource("4_jkush")
-region = Rect2(288, 0, 48, 48)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_r7fgb"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jkush")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vmi10")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mndha")
-}],
-"loop": true,
-"name": &"hit",
-"speed": 3.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_os74a")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ggx0o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0kjde")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ay52l")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c6poq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gsfwq")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_iet35")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mxbqu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0l2yj")
-}],
-"loop": true,
-"name": &"jump",
-"speed": 3.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x8cua")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s3tad")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ne8t6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sc7t3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mcfkd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sg5fg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_064nc")
-}],
-"loop": true,
-"name": &"run",
-"speed": 4.0
-}]
+[ext_resource type="SpriteFrames" path="res://assets/player/improved/sausage_frames.tres" id="sausage_frames"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0e4v"]
 radius = 8.666668
@@ -172,6 +13,12 @@ radius = 15.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aatkl"]
 size = Vector2(8, 50)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p0e4v"]
+font_size = 18
+font_color = Color(0.2, 0.8, 1, 1)
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Player1" type="CharacterBody2D" unique_id=1]
 scale = Vector2(3, 3)
@@ -186,9 +33,11 @@ texture_scale = 5.74
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2]
 texture_filter = 1
-sprite_frames = SubResource("SpriteFrames_r7fgb")
-animation = &"hit"
+scale = Vector2(0.25, 0.25)
+sprite_frames = ExtResource("sausage_frames")
+animation = &"idle"
 autoplay = "idle"
+frame_progress = 0.14108841
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=3]
 position = Vector2(8.333334, 13.666666)
@@ -209,6 +58,16 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="backarea" unique_id=7]
 position = Vector2(-18, 1)
 shape = SubResource("RectangleShape2D_aatkl")
+
+[node name="PlayerIndicator" type="Label" parent="." unique_id=1726729489]
+offset_left = -15.0
+offset_top = -120.0
+offset_right = -14.0
+offset_bottom = -100.0
+text = "P1
+▼"
+label_settings = SubResource("LabelSettings_p0e4v")
+horizontal_alignment = 1
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="area_exited" from="Hitbox" to="." method="_on_hitbox_area_exited"]

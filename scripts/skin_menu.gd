@@ -63,33 +63,22 @@ func _create_skin_buttons(container: HBoxContainer, player_num: int) -> void:
 		button.add_theme_stylebox_override("hover", white_sb_hover)
 		button.add_theme_stylebox_override("pressed", white_sb_pressed)
 		
-		if variant_id == 0:
-			var lbl = Label.new()
-			lbl.text = "Normal"
-			lbl.set_anchors_preset(PRESET_FULL_RECT)
-			lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			lbl.add_theme_color_override("font_color", Color.BLACK)
-			button.add_child(lbl)
-		else:
-			var logo_path = "res://assets/skins/%d/logo.png" % variant_id
-			if ResourceLoader.exists(logo_path):
-				var tex = load(logo_path)
-				var tex_rect = TextureRect.new()
-				tex_rect.texture = tex
-				tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-				tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-				tex_rect.set_anchors_preset(PRESET_FULL_RECT)
-				tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-				button.add_child(tex_rect)
-			else:
-				var lbl = Label.new()
-				lbl.text = "Skin %d" % variant_id
-				lbl.set_anchors_preset(PRESET_FULL_RECT)
-				lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-				lbl.add_theme_color_override("font_color", Color.BLACK)
-				button.add_child(lbl)
+		var tex_path = "res://assets/player/improved/s.png"
+		if variant_id == 1: tex_path = "res://assets/player/improved/s_b.png"
+		elif variant_id == 2: tex_path = "res://assets/player/improved/s_p.png"
+		elif variant_id == 3: tex_path = "res://assets/player/improved/s_y.png"
+		var tex = load(tex_path)
+		var tex_rect = TextureRect.new()
+		if tex:
+			var logo_tex = AtlasTexture.new()
+			logo_tex.atlas = tex
+			logo_tex.region = Rect2(0, 0, 214, 239)
+			tex_rect.texture = logo_tex
+		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.set_anchors_preset(PRESET_FULL_RECT)
+		tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(tex_rect)
 				
 		var tick: Label = Label.new()
 		tick.text = "✔"

@@ -2,6 +2,7 @@ extends CanvasLayer
 
 class_name PauseMenu
 
+@onready var color_rect: ColorRect = $ColorRect
 @onready var panel: Panel = $Panel
 @onready var resume_button: Button = $Panel/VBoxContainer/ResumeButton
 @onready var main_menu_button: Button = $Panel/VBoxContainer/MainMenuButton
@@ -14,6 +15,7 @@ func _ready() -> void:
 	panel.process_mode = Node.PROCESS_MODE_ALWAYS
 	game_manager = GameManager.instance
 	panel.visible = false
+	if color_rect: color_rect.visible = false
 	
 	resume_button.pressed.connect(_on_resume_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
@@ -24,6 +26,7 @@ func _ready() -> void:
 
 func _on_game_paused(paused: bool) -> void:
 	panel.visible = paused
+	if color_rect: color_rect.visible = paused
 	get_tree().paused = paused
 
 func _on_resume_pressed() -> void:
