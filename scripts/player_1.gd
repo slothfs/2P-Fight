@@ -20,6 +20,39 @@ var loss_sfx: AudioStreamPlayer
 var jump_sfx: AudioStreamPlayer
 var game_controller: GameController = null
 
+var invis_duration: float = 0.0
+var invis_cooldown: float = 0.0
+var dash_duration: float = 0.0
+var dash_cooldown: float = 0.0
+var is_invisible: bool = false
+var is_dashing: bool = false
+var shadow_timer: float = 0.0
+
+func _set_pass_through(enable: bool) -> void:
+	if not is_inside_tree(): return
+	for child in get_parent().get_children():
+		if child is CharacterBody2D and child != self:
+			if enable:
+				add_collision_exception_with(child)
+			else:
+				remove_collision_exception_with(child)
+
+func _create_dash_shadow() -> void:
+	var shadow = AnimatedSprite2D.new()
+	shadow.sprite_frames = $AnimatedSprite2D.sprite_frames
+	shadow.animation = $AnimatedSprite2D.animation
+	shadow.frame = $AnimatedSprite2D.frame
+	shadow.global_position = $AnimatedSprite2D.global_position
+	shadow.flip_h = $AnimatedSprite2D.flip_h
+	shadow.scale = $AnimatedSprite2D.scale
+	shadow.modulate = $AnimatedSprite2D.modulate
+	shadow.modulate.a = 0.5
+	get_parent().add_child(shadow)
+	
+	var tween = create_tween()
+	tween.tween_property(shadow, "modulate:a", 0.0, 0.3)
+	tween.tween_callback(shadow.queue_free)
+
 func die() -> void:
 	if dead: return
 	dead = true
@@ -94,12 +127,61 @@ func _physics_process(delta: float) -> void:
 		return
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
+	if invis_cooldown > 0:
+		invis_cooldown -= delta
+	if dash_cooldown > 0:
+		dash_cooldown -= delta
+
+	if invis_duration > 0:
+		invis_duration -= delta
+		if invis_duration <= 0:
+			is_invisible = false
+			$AnimatedSprite2D.modulate.a = 1.0
+			if has_node("PlayerIndicator"): get_node("PlayerIndicator").visible = true
+			if not is_dashing: _set_pass_through(false)
+
+	if is_dashing:
+		shadow_timer -= delta
+		if shadow_timer <= 0:
+			shadow_timer = 0.05
+			_create_dash_shadow()
+
+	if dash_duration > 0:
+		dash_duration -= delta
+		if dash_duration <= 0:
+			is_dashing = false
+			$backarea.set_deferred("monitoring", true)
+			$Hitbox.set_deferred("monitoring", true)
+			if not is_invisible: _set_pass_through(false)
 
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
 	var dir: float = Input.get_action_strength("p1_right") - Input.get_action_strength("p1_left")
-	velocity.x = dir * speed
+
+	if Input.is_action_just_pressed("p1_invisible") and invis_cooldown <= 0:
+		invis_cooldown = 10.0
+		invis_duration = 1.0
+		is_invisible = true
+		$AnimatedSprite2D.modulate.a = 0.2
+		if has_node("PlayerIndicator"): get_node("PlayerIndicator").visible = false
+		_set_pass_through(true)
+
+	if Input.is_action_just_pressed("p1_dash") and dash_cooldown <= 0:
+		dash_cooldown = 5.0
+		dash_duration = 0.2
+		is_dashing = true
+		$backarea.set_deferred("monitoring", false)
+		$Hitbox.set_deferred("monitoring", false)
+		jump_sfx.stop()
+		jump_sfx.play()
+		_set_pass_through(true)
+
+	var current_speed = speed * 4.0 if is_dashing else speed
+	if is_dashing and dir == 0:
+		velocity.x = -current_speed if $AnimatedSprite2D.flip_h else current_speed
+	else:
+		velocity.x = dir * current_speed
 
 	if Input.is_action_just_pressed("p1_jump") and is_on_floor():
 		velocity.y = jump_force
@@ -109,10 +191,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("p1_attack") and not attacking and attack_cooldown <= 0:
 		attack()
 
-	if dir != 0:
-		var facing_left: bool = dir < 0
-		$AnimatedSprite2D.flip_h = facing_left
-		_sync_back_area_position(facing_left)
+	if abs(velocity.x) > 10.0 and not is_dashing:
+		var facing_left: bool = velocity.x < 0
+		if $AnimatedSprite2D.flip_h != facing_left:
+			$AnimatedSprite2D.flip_h = facing_left
+			_sync_back_area_position(facing_left)
 
 	move_and_slide()
 	update_anim(dir)

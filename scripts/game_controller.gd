@@ -22,6 +22,7 @@ var game_over: bool = false
 func _ready() -> void:
 	_ensure_game_manager()
 	call_deferred("_ensure_lava_area")
+	call_deferred("_setup_abilities_ui")
 	
 	var gm: GameManager = GameManager.instance
 	var use_multiplayer_players: bool = false
@@ -241,6 +242,105 @@ func _process(delta: float) -> void:
 
 	var dist = player1.global_position.distance_to(player2.global_position)
 	_update_proximity_effect(dist)
+	_update_abilities_ui()
+
+var p1_invis_label: Label
+var p1_dash_label: Label
+var p2_invis_label: Label
+var p2_dash_label: Label
+var p1_invis_rect: TextureRect
+var p1_dash_rect: TextureRect
+var p2_invis_rect: TextureRect
+var p2_dash_rect: TextureRect
+
+func _create_ability_row(title: String, logo_tex: Texture2D) -> Array:
+	var hbox = HBoxContainer.new()
+	var icon = TextureRect.new()
+	icon.texture = logo_tex
+	icon.custom_minimum_size = Vector2(40, 40)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	hbox.add_child(icon)
+	
+	var lbl = Label.new()
+	lbl.add_theme_font_size_override("font_size", 28)
+	lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	lbl.add_theme_constant_override("outline_size", 8)
+	lbl.text = title
+	hbox.add_child(lbl)
+	return [hbox, icon, lbl]
+	
+func _setup_abilities_ui() -> void:
+	var canvas = CanvasLayer.new()
+	canvas.layer = 90
+	add_child(canvas)
+	
+	var default_logo = load("res://assets/Object/Crystal.png")
+	if not default_logo:
+		default_logo = PlaceholderTexture2D.new()
+		default_logo.size = Vector2(32, 32)
+		
+	var p1_container = VBoxContainer.new()
+	p1_container.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	p1_container.position = Vector2(20, 20)
+	canvas.add_child(p1_container)
+	
+	var p1_inv = _create_ability_row("P1 Invis (E): Ready", default_logo)
+	p1_container.add_child(p1_inv[0])
+	p1_invis_rect = p1_inv[1]
+	p1_invis_label = p1_inv[2]
+	
+	var p1_dsh = _create_ability_row("P1 Dash (Q): Ready", default_logo)
+	p1_container.add_child(p1_dsh[0])
+	p1_dash_rect = p1_dsh[1]
+	p1_dash_label = p1_dsh[2]
+	
+	var p2_container = VBoxContainer.new()
+	p2_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	p2_container.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	p2_container.position = Vector2(get_viewport_rect().size.x - 300, 20)
+	canvas.add_child(p2_container)
+	
+	var p2_inv = _create_ability_row("P2 Invis (O): Ready", default_logo)
+	p2_container.add_child(p2_inv[0])
+	p2_invis_rect = p2_inv[1]
+	p2_invis_label = p2_inv[2]
+	
+	var p2_dsh = _create_ability_row("P2 Dash (U): Ready", default_logo)
+	p2_container.add_child(p2_dsh[0])
+	p2_dash_rect = p2_dsh[1]
+	p2_dash_label = p2_dsh[2]
+
+func _update_abilities_ui() -> void:
+	if is_instance_valid(player1) and p1_invis_label and p1_dash_label:
+		var i_cd = player1.get("invis_cooldown")
+		var d_cd = player1.get("dash_cooldown")
+		p1_invis_label.text = "Invis (E): " + (str(ceil(i_cd)) + "s" if i_cd != null and i_cd > 0 else "Ready")
+		if i_cd != null and i_cd > 0:
+			p1_invis_rect.modulate = Color(0.5, 0.5, 0.5, 0.5)
+		else:
+			p1_invis_rect.modulate = Color.WHITE
+			
+		p1_dash_label.text = "Dash (Q): " + (str(ceil(d_cd)) + "s" if d_cd != null and d_cd > 0 else "Ready")
+		if d_cd != null and d_cd > 0:
+			p1_dash_rect.modulate = Color(0.5, 0.5, 0.5, 0.5)
+		else:
+			p1_dash_rect.modulate = Color.WHITE
+		
+	if is_instance_valid(player2) and p2_invis_label and p2_dash_label:
+		var i_cd = player2.get("invis_cooldown")
+		var d_cd = player2.get("dash_cooldown")
+		p2_invis_label.text = "Invis (O): " + (str(ceil(i_cd)) + "s" if i_cd != null and i_cd > 0 else "Ready")
+		if i_cd != null and i_cd > 0:
+			p2_invis_rect.modulate = Color(0.5, 0.5, 0.5, 0.5)
+		else:
+			p2_invis_rect.modulate = Color.WHITE
+			
+		p2_dash_label.text = "Dash (U): " + (str(ceil(d_cd)) + "s" if d_cd != null and d_cd > 0 else "Ready")
+		if d_cd != null and d_cd > 0:
+			p2_dash_rect.modulate = Color(0.5, 0.5, 0.5, 0.5)
+		else:
+			p2_dash_rect.modulate = Color.WHITE
 
 func _update_proximity_effect(distance: float) -> void:
 	var view_size = get_viewport_rect().size

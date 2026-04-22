@@ -19,6 +19,39 @@ var jump_sfx: AudioStreamPlayer
 var owner_id = 1
 var my_role = "P1"
 
+var invis_duration: float = 0.0
+var invis_cooldown: float = 0.0
+var dash_duration: float = 0.0
+var dash_cooldown: float = 0.0
+var is_invisible: bool = false
+var is_dashing: bool = false
+var shadow_timer: float = 0.0
+
+func _set_pass_through(enable: bool) -> void:
+	if not is_inside_tree(): return
+	for child in get_parent().get_children():
+		if child is CharacterBody2D and child != self:
+			if enable:
+				add_collision_exception_with(child)
+			else:
+				remove_collision_exception_with(child)
+
+func _create_dash_shadow() -> void:
+	var shadow = AnimatedSprite2D.new()
+	shadow.sprite_frames = $AnimatedSprite2D.sprite_frames
+	shadow.animation = $AnimatedSprite2D.animation
+	shadow.frame = $AnimatedSprite2D.frame
+	shadow.global_position = $AnimatedSprite2D.global_position
+	shadow.flip_h = $AnimatedSprite2D.flip_h
+	shadow.scale = $AnimatedSprite2D.scale
+	shadow.modulate = $AnimatedSprite2D.modulate
+	shadow.modulate.a = 0.5
+	get_parent().add_child(shadow)
+	
+	var tween = create_tween()
+	tween.tween_property(shadow, "modulate:a", 0.0, 0.3)
+	tween.tween_callback(shadow.queue_free)
+
 func _setup_authority():
 	set_multiplayer_authority(owner_id)
 	$PlayerIndicator.text = my_role + "\n▼"
@@ -77,15 +110,48 @@ func _physics_process(delta: float) -> void:
 	
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
+	if invis_cooldown > 0:
+		invis_cooldown -= delta
+	if dash_cooldown > 0:
+		dash_cooldown -= delta
+
+	if invis_duration > 0:
+		invis_duration -= delta
+		if invis_duration <= 0:
+			is_invisible = false
+			$AnimatedSprite2D.modulate.a = 1.0
+			if has_node("PlayerIndicator"): get_node("PlayerIndicator").visible = true
+			if not is_dashing: _set_pass_through(false)
+
+	if is_dashing:
+		shadow_timer -= delta
+		if shadow_timer <= 0:
+			shadow_timer = 0.05
+			_create_dash_shadow()
+
+	if dash_duration > 0:
+		dash_duration -= delta
+		if dash_duration <= 0:
+			is_dashing = false
+			var back = get_node_or_null("backarea")
+			if back: back.set_deferred("monitoring", true)
+			var hitbox = get_node_or_null("Hitbox")
+			if hitbox: hitbox.set_deferred("monitoring", true)
+			if not is_invisible: _set_pass_through(false)
 
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Only the player who owns this character can control it
 	var dir: float = 0.0
 	if is_multiplayer_authority():
-		# In network multiplayer, the local player always uses WASD (p1 keys) to control their character
 		dir = Input.get_action_strength("p1_right") - Input.get_action_strength("p1_left")
+		
+		if Input.is_action_just_pressed("p1_invisible") and invis_cooldown <= 0:
+			rpc("trigger_invisible")
+			
+		if Input.is_action_just_pressed("p1_dash") and dash_cooldown <= 0:
+			rpc("trigger_dash")
+
 		if Input.is_action_just_pressed("p1_jump") and is_on_floor():
 			velocity.y = jump_force
 			jump_sfx.stop()
@@ -93,12 +159,15 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed("p1_attack") and not attacking and attack_cooldown <= 0:
 			attack()
 				
-		velocity.x = dir * speed
+		var current_speed = speed * 4.0 if is_dashing else speed
+		if is_dashing and dir == 0:
+			velocity.x = -current_speed if $AnimatedSprite2D.flip_h else current_speed
+		else:
+			velocity.x = dir * current_speed
 		
-		# Sync position and velocity to other clients via RPC
 		rpc("sync_movement", position, velocity, attacking, $AnimatedSprite2D.flip_h)
 	
-	if abs(velocity.x) > 10.0:
+	if abs(velocity.x) > 10.0 and not is_dashing:
 		var facing_left: bool = velocity.x < 0
 		if $AnimatedSprite2D.flip_h != facing_left:
 			$AnimatedSprite2D.flip_h = facing_left
@@ -106,6 +175,29 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	update_anim(dir)
+
+@rpc("any_peer", "call_local", "reliable")
+func trigger_invisible():
+	invis_cooldown = 10.0
+	invis_duration = 1.0
+	is_invisible = true
+	$AnimatedSprite2D.modulate.a = 0.2
+	if has_node("PlayerIndicator"): get_node("PlayerIndicator").visible = false
+	_set_pass_through(true)
+
+@rpc("any_peer", "call_local", "reliable")
+func trigger_dash():
+	dash_cooldown = 5.0
+	dash_duration = 0.2
+	is_dashing = true
+	var back = get_node_or_null("backarea")
+	if back: back.set_deferred("monitoring", false)
+	var hitbox = get_node_or_null("Hitbox")
+	if hitbox: hitbox.set_deferred("monitoring", false)
+	if jump_sfx:
+		jump_sfx.stop()
+		jump_sfx.play()
+	_set_pass_through(true)
 
 @rpc("any_peer", "unreliable", "call_local")
 func sync_movement(pos: Vector2, vel: Vector2, is_attacking: bool, flip: bool):
@@ -145,12 +237,13 @@ func attack() -> void:
 	hit_sfx.play()
 
 	if opponent != null and is_instance_valid(opponent):
-		var opponent_backarea: Area2D = opponent.get_node("backarea")
-		var hitbox_area: Area2D = $Hitbox
-		var overlapping_areas: Array = hitbox_area.get_overlapping_areas()
-		if opponent_backarea in overlapping_areas:
-			if is_multiplayer_authority():
-				opponent.rpc("die")
+		var opponent_backarea: Area2D = opponent.get_node_or_null("backarea")
+		var hitbox_area: Area2D = get_node_or_null("Hitbox")
+		if hitbox_area and opponent_backarea:
+			var overlapping_areas: Array = hitbox_area.get_overlapping_areas()
+			if opponent_backarea in overlapping_areas:
+				if is_multiplayer_authority():
+					opponent.rpc("die")
 
 	await get_tree().create_timer(0.6).timeout
 	attacking = false
@@ -165,12 +258,13 @@ func die() -> void:
 	$AnimatedSprite2D.play("hurt")
 	
 	await get_tree().create_timer(1.0).timeout
-	var gm: GameManager = GameManager.instance
+	var gm = get_node_or_null("/root/GameManager")
 	if gm != null:
 		var winner = 2 if my_role == "P1" else 1
 		gm.end_game(winner)
 
 func _sync_back_area_position(facing_left: bool) -> void:
+	if not has_node("backarea") or not has_node("Hitbox"): return
 	$backarea.position.x = 0
 	if facing_left:
 		$backarea/CollisionShape2D.position.x = 18
