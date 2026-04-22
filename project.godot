@@ -21,7 +21,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://scripts/game_manager.gd"
+GameManagerSingleton="*res://scripts/game_manager.gd"
 SceneTransition="*res://scripts/scene_transition.gd"
 
 [display]

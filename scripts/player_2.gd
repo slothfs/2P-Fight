@@ -3,6 +3,7 @@ extends CharacterBody2D
 class_name Player2
 
 const BACK_AREA_OFFSET: float = 18.0
+const LOSS_DELAY_AFTER_AUDIO: float = 1.0
 
 var speed: float = 1500
 var jump_force: float = -2000
@@ -13,25 +14,57 @@ var opponent: CharacterBody2D = null
 
 var dead: bool = false
 
+var footstep_sfx: AudioStreamPlayer
+var hit_sfx: AudioStreamPlayer
+var loss_sfx: AudioStreamPlayer
+var jump_sfx: AudioStreamPlayer
+var game_controller: GameController = null
+
 func die() -> void:
 	if dead: return
 	dead = true
+	loss_sfx.play()
+	footstep_sfx.stop()
 	print("player 2 died")
 	velocity = Vector2.ZERO
 	$AnimatedSprite2D.play("hurt")
-	set_physics_process(false)
 	await get_tree().create_timer(1.0).timeout
-	var gm = get_node_or_null("/root/GameManager")
-	if gm: gm.end_game(1)
-	queue_free()
+	var gm: GameManager = GameManager.instance
+	if gm != null:
+		gm.end_game(1)
 
 func _ready() -> void:
-	var gm = get_node_or_null("/root/GameManager")
-	if gm:
+	footstep_sfx = AudioStreamPlayer.new()
+	footstep_sfx.stream = preload("res://assets/Sfx/footstep.mp3")
+	footstep_sfx.bus = "SFX"
+	add_child(footstep_sfx)
+	
+	hit_sfx = AudioStreamPlayer.new()
+	hit_sfx.stream = preload("res://assets/Sfx/hitting_fixed.wav")
+	hit_sfx.volume_db = -2.0
+	hit_sfx.bus = "SFX"
+	add_child(hit_sfx)
+	
+	loss_sfx = AudioStreamPlayer.new()
+	loss_sfx.stream = preload("res://assets/Sfx/lossing_fixed.wav")
+	loss_sfx.volume_db = -1.5
+	loss_sfx.bus = "SFX"
+	add_child(loss_sfx)
+	
+	jump_sfx = AudioStreamPlayer.new()
+	jump_sfx.stream = preload("res://assets/Sfx/new jump.mp3")
+	jump_sfx.volume_db = -1.5
+	jump_sfx.bus = "SFX"
+	add_child(jump_sfx)
+
+	var gm: GameManager = GameManager.instance
+	if gm != null:
 		if gm.player2_skin_id != 0:
 			apply_skin(gm.player2_skin_id)
 		elif gm.player2_skin_color != Color.WHITE:
 			$AnimatedSprite2D.modulate = gm.player2_skin_color
+
+	game_controller = get_parent().get_node_or_null("GameController") as GameController
 
 	_sync_back_area_position($AnimatedSprite2D.flip_h)
 
@@ -57,6 +90,8 @@ func apply_skin(skin_id: int) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if dead:
+		return
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
 
@@ -68,6 +103,8 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("p2_jump") and is_on_floor():
 		velocity.y = jump_force
+		jump_sfx.stop()
+		jump_sfx.play()
 
 	if Input.is_action_just_pressed("p2_attack") and not attacking and attack_cooldown <= 0:
 		attack()
@@ -80,23 +117,39 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	update_anim(dir)
 
-func update_anim(dir: float) -> void:
+func update_anim(_dir: float) -> void:
 	if dead:
 		return
 	if attacking:
 		return
 
-	if not is_on_floor():
-		$AnimatedSprite2D.play("jump")
-	elif abs(velocity.x) > 0.1:
-		$AnimatedSprite2D.play("run")
+	if abs(velocity.x) > 0.1:
+		_play_animation("run")
+		if is_on_floor():
+			if not footstep_sfx.playing:
+				footstep_sfx.play()
+		else:
+			footstep_sfx.stop()
+	elif not is_on_floor():
+		_play_animation("jump")
+		footstep_sfx.stop()
 	else:
-		$AnimatedSprite2D.play("idle")
+		_play_animation("idle")
+		footstep_sfx.stop()
+
+func _play_animation(anim_name: String) -> void:
+	var sprite: AnimatedSprite2D = $AnimatedSprite2D
+	if sprite.animation != anim_name or not sprite.is_playing():
+		sprite.play(anim_name)
 
 func attack() -> void:
 	attacking = true
 	attack_cooldown = 1.0
 	$AnimatedSprite2D.play("hit")
+	hit_sfx.stop()
+	hit_sfx.play()
+	if game_controller != null:
+		game_controller.duck_music(3.5, 0.35)
 
 	if opponent != null and is_instance_valid(opponent):
 		var opponent_backarea: Area2D = opponent.get_node("backarea")

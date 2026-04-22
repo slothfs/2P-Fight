@@ -42,14 +42,12 @@ process_mode = 3
 script = ExtResource("1_pause")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1684450722]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0, 0, 0, 0.5)
 
 [node name="Panel" type="Panel" parent="." unique_id=736628478]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -97,7 +95,7 @@ theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-text = "RESUME"
+text = "RESUME ▶"
 
 [node name="MainMenuButton" type="Button" parent="Panel/VBoxContainer" unique_id=2057136337]
 custom_minimum_size = Vector2(0, 70)

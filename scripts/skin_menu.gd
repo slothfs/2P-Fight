@@ -2,6 +2,8 @@ extends Control
 
 class_name SkinMenu
 
+const BUTTON_CLICK_SOUND: AudioStream = preload("res://assets/Sfx/button click.mp3")
+
 @onready var p1_skin_container: HBoxContainer = $VBoxContainer/Player1Skins
 @onready var p2_skin_container: HBoxContainer = $VBoxContainer/Player2Skins
 @onready var back_button: Button = $VBoxContainer/BackButton
@@ -19,9 +21,9 @@ func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
 
 func _create_skin_buttons(container: HBoxContainer, player_num: int) -> void:
-	var gm = get_node_or_null("/root/GameManager")
+	var gm: GameManager = GameManager.instance
 	var current_skin = 0
-	if gm:
+	if gm != null:
 		current_skin = gm.player1_skin_id if player_num == 1 else gm.player2_skin_id
 
 	var white_sb = StyleBoxFlat.new()
@@ -98,9 +100,24 @@ func _create_skin_buttons(container: HBoxContainer, player_num: int) -> void:
 		)
 		container.add_child(button)
 
+func _play_sfx(sound: AudioStream) -> void:
+	if sound == null:
+		return
+	var sfx_player: AudioStreamPlayer = AudioStreamPlayer.new()
+	sfx_player.stream = sound
+	sfx_player.bus = "SFX"
+	add_child(sfx_player)
+	sfx_player.play()
+	sfx_player.finished.connect(sfx_player.queue_free)
+
+func _play_button_click_sound() -> void:
+	_play_sfx(BUTTON_CLICK_SOUND)
+
 func _on_skin_selected(player_num: int, variant_id: int, container: HBoxContainer = null) -> void:
-	var gm = get_node_or_null("/root/GameManager")
-	if gm: gm.set_player_skin(player_num, Color.WHITE, variant_id)
+	_play_button_click_sound()
+	var gm: GameManager = GameManager.instance
+	if gm != null:
+		gm.set_player_skin(player_num, Color.WHITE, variant_id)
 	print("Player ", player_num, " selected skin ", variant_id)
 	
 	if container:
@@ -111,11 +128,13 @@ func _on_skin_selected(player_num: int, variant_id: int, container: HBoxContaine
 					tick.visible = (btn.get_meta("variant_id") == variant_id)
 
 func _on_play_pressed() -> void:
-	var gm = get_node_or_null("/root/GameManager")
-	if gm and gm.selected_arena != "":
+	_play_button_click_sound()
+	var gm: GameManager = GameManager.instance
+	if gm != null and gm.selected_arena != "":
 		SceneTransition.change_scene(gm.selected_arena)
 	else:
 		SceneTransition.change_scene("res://Scenes/game.tscn")
 
 func _on_back_pressed() -> void:
+	_play_button_click_sound()
 	SceneTransition.change_scene("res://Scenes/main_menu.tscn")

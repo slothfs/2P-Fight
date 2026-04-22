@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dimvfanxh3714"]
+[gd_scene format=3 uid="uid://b0bv6ttixheh7"]
 
 [ext_resource type="Theme" uid="uid://b87gv25t76657" path="res://cartoon_theme.tres" id="1_kmead"]
 [ext_resource type="Script" uid="uid://c0sljeav1ynn1" path="res://scripts/skin_menu.gd" id="1_skinmenu"]
@@ -58,6 +58,7 @@ corner_radius_bottom_right = 100
 corner_radius_bottom_left = 100
 
 [node name="SkinMenu" type="Control" unique_id=1107727386]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

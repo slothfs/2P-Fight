@@ -219,6 +219,7 @@ physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_i6g32")
 
 [node name="Game" type="Node2D" unique_id=2132598276]
+texture_filter = 1
 
 [node name="Background" type="ColorRect" parent="." unique_id=1807476048]
 anchors_preset = 15
@@ -227,6 +228,7 @@ anchor_bottom = 1.0
 color = Color(0.1, 0.15, 0.3, 1)
 
 [node name="Player1" parent="." unique_id=1475455660 instance=ExtResource("2_player1")]
+texture_filter = 1
 position = Vector2(-883.9999, 349)
 scale = Vector2(7, 7)
 

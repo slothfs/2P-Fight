@@ -1,5 +1,7 @@
 extends Node
 
+class_name GameManager
+
 signal game_paused(paused: bool)
 signal game_over(winner: int)
 
@@ -12,7 +14,7 @@ var selected_arena: String = "res://Scenes/game.tscn"
 var has_game_ended: bool = false
 var last_winner: int = 0
 
-static var instance: Node
+static var instance: GameManager
 
 func _enter_tree() -> void:
 	if instance == null:

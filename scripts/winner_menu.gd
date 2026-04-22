@@ -27,6 +27,8 @@ func _on_game_over(winner: int) -> void:
 	# Capture screenshot BEFORE showing UI or pausing
 	var img = get_viewport().get_texture().get_image()
 	
+	var full_tex = ImageTexture.create_from_image(img)
+	
 	var final_winner: int = winner
 	if game_manager != null and game_manager.has_game_ended and game_manager.last_winner != 0:
 		final_winner = game_manager.last_winner
@@ -60,10 +62,10 @@ func _on_game_over(winner: int) -> void:
 		screenshot_rect.texture = tex
 	
 	if background_texture:
-		# Use a default dark or wavy texture for background, or use the screenshot
-		background_texture.texture = tex
+		# Use full screenshot for background
+		background_texture.texture = full_tex
 		background_texture.visible = true
-		background_texture.modulate = Color(0.3, 0.3, 0.3, 1.0) # Darken the background to make the photo pop
+		background_texture.modulate = Color(0.3, 0.3, 0.3, 1.0)
 		
 	get_tree().paused = true
 	
