@@ -2,30 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://bmd8p1cd5h6dc" path="res://assets/player/improved/s.png" id="1_kmt3t"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
-atlas = ExtResource("1_kmt3t")
-region = Rect2(0, 0, 214, 239)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_idle_1"]
-atlas = ExtResource("1_kmt3t")
-region = Rect2(214, 0, 214, 239)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_idle_2"]
-atlas = ExtResource("1_kmt3t")
-region = Rect2(428, 0, 214, 239)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_run_0"]
-atlas = ExtResource("1_kmt3t")
-region = Rect2(0, 239, 214, 239)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_run_1"]
-atlas = ExtResource("1_kmt3t")
-region = Rect2(214, 239, 214, 239)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_run_2"]
-atlas = ExtResource("1_kmt3t")
-region = Rect2(428, 239, 214, 239)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_hit_0"]
 atlas = ExtResource("1_kmt3t")
 region = Rect2(0, 478, 214, 239)
@@ -50,6 +26,18 @@ region = Rect2(856, 0, 214, 239)
 atlas = ExtResource("1_kmt3t")
 region = Rect2(1070, 0, 214, 239)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
+atlas = ExtResource("1_kmt3t")
+region = Rect2(0, 0, 214, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_1"]
+atlas = ExtResource("1_kmt3t")
+region = Rect2(214, 0, 214, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_2"]
+atlas = ExtResource("1_kmt3t")
+region = Rect2(428, 0, 214, 239)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_jump_0"]
 atlas = ExtResource("1_kmt3t")
 region = Rect2(642, 239, 214, 239)
@@ -61,6 +49,18 @@ region = Rect2(856, 239, 214, 239)
 [sub_resource type="AtlasTexture" id="AtlasTexture_jump_2"]
 atlas = ExtResource("1_kmt3t")
 region = Rect2(1070, 239, 214, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_run_0"]
+atlas = ExtResource("1_kmt3t")
+region = Rect2(0, 239, 214, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_run_1"]
+atlas = ExtResource("1_kmt3t")
+region = Rect2(214, 239, 214, 239)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_run_2"]
+atlas = ExtResource("1_kmt3t")
+region = Rect2(428, 239, 214, 239)
 
 [resource]
 animations = [{
