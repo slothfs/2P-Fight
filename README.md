@@ -31,5 +31,8 @@ game needed to be downlaoded and played within same wifi to play multiplayer
 # controls :
 they are explained in itch page and downlaod link of exe file is also available in itch : https://abishek-kk.itch.io/sauceit
 
+# demo link:
+https://abishek-kk.itch.io/sauceit
+
 hackclub is awesome!!
   
