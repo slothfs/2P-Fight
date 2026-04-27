@@ -1,6 +1,6 @@
 ## Meat Stick Madness
 # description:
-it is a very interesting game about sausage trying to give backshot to his opponent to win a game and take a funny scrrenshot of them this game is winned by using diff skills available in game with your brain use hehe why did i make it ? .. # umm submission for the game hackclub hoping on golden ticket🥹
+it is a very interesting game about sausage trying to give backshot to his opponent to win a game and take a funny scrrenshot of them this game is winned by using diff skills available in game with your brain use hehe why did i make it ? .
 
 # goal 
 aim for back of player and try hit with differents abilities first to hit is the winner and get snapshot of the picture when winning
